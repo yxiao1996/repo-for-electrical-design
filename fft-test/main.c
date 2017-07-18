@@ -70,7 +70,7 @@ void main(void)
   //use timer0 as sample timer
 //  TB0CTL = TBSSEL__SMCLK + MC__UP; // SMCLK, up-mode
 //  TB0CCR0 = SMCLK_FREQ - 1; // 4MHz -> 6.4kHz
-//  TB0CCTL0 = OUTMOD_4; //实际只有3.2kHz
+//  TB0CCTL0 = OUTMOD_4; //脢碌录脢脰禄脫脨3.2kHz
   ADC12CTL0 = ADC12SHT0_0 + ADC12REF2_5V +  ADC12ON + ADC12MSC;
                                             // Internal ref = 1.5V
   ADC12CTL1 = ADC12SHP + ADC12CONSEQ_2;                     // enable sample timer
