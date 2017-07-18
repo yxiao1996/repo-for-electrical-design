@@ -25,16 +25,16 @@ const uint8_t SEG_CTRL_BIN[17] =
 
 void initLcdSeg()
 {
-  //�˿��趨
-  P5SEL |= BIT3 + BIT4 + BIT5; //P5.3 .4 .5��ΪLCD��COM
-  LCDBPCTL0 = 0x0FFF; //S0~S11���ڶ˿���ΪLCD�Ķ�ѡ
-  //�������趨
-  LCDBCTL0 = LCDDIV_21 + LCDPRE__4 + LCD4MUX; //ACLK, 21*4��Ƶ����48.76Hz
-  LCDBMEMCTL |= LCDCLRM; //���LCD�洢��
-  LCDBCTL0 |= LCDSON + LCDON; //����LCDģ��
+  //端口设定
+  P5SEL |= BIT3 + BIT4 + BIT5; //P5.3 .4 .5作为LCD的COM
+  LCDBPCTL0 = 0x0FFF; //S0~S11所在端口作为LCD的段选
+  //控制器设定
+  LCDBCTL0 = LCDDIV_21 + LCDPRE__4 + LCD4MUX; //ACLK, 21*4分频，合48.76Hz
+  LCDBMEMCTL |= LCDCLRM; //清空LCD存储器
+  LCDBCTL0 |= LCDSON + LCDON; //启动LCD模块
 }
 
-void LCDSEG_SetDigit(int pos, int value) //value����0~16ʱϨ��,16��ʾ-
+void LCDSEG_SetDigit(int pos, int value) //value不在0~16时熄灭,16显示-
 {
   if(pos < 0 || pos > 6)
     return;
@@ -50,7 +50,7 @@ void LCDSEG_SetDigit(int pos, int value) //value����0~16ʱϨ��,16��ʾ-
   { BIT7, BIT6, BIT5, BIT0, BIT1, BIT3, BIT2 };
   
   mem = LCDMEM[pos];
-  mem &= 0x10; //��տ������ֶε�λ
+  mem &= 0x10; //清空控制数字段的位
   int i;
   for(i=0;i<7;++i)
   {
@@ -90,10 +90,10 @@ void LCDSEG_DisplayNumber(int32_t num, int dppos)
   }
   
   if(isneg)
-    LCDSEG_SetDigit(curpos++, 16); //�Ӹ���
+    LCDSEG_SetDigit(curpos++, 16); //加负号
   
   while(curpos < 6)
-    LCDSEG_SetDigit(curpos++, -1); //������λ���
+    LCDSEG_SetDigit(curpos++, -1); //将多余位清空
   
   int i;
   for(i=3;i<=5;++i)
