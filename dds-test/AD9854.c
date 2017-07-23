@@ -5,15 +5,15 @@ uchar table9854[6];
 void set_sine(double freq)
 {
 	double f=2*freq;
-	table9854[0]=(uchar)((f*256)/160000000);//¸ßÎ»
-	table9854[1]=(uchar)(((f*256)/160000000-table9854[0])*256);//È¥µôÕûÊı²¿·Ö£¬ÓÃÔ­À´µÄÊı¼õÕûÊıÔÙ³Ë256
+	table9854[0]=(uchar)((f*256)/160000000);//é«˜ä½
+	table9854[1]=(uchar)(((f*256)/160000000-table9854[0])*256);//å»æ‰æ•´æ•°éƒ¨åˆ†ï¼Œç”¨åŸæ¥çš„æ•°å‡æ•´æ•°å†ä¹˜256
     table9854[2]=(uchar)((((f*256)/160000000-table9854[0])*256-table9854[1])*256);
 	table9854[3]=(uchar)(((((f*256)/160000000-table9854[0])*256-table9854[1])*256-table9854[2])*256);
 	table9854[4]=(uchar)((((((f*256)/160000000-table9854[0])*256-table9854[1])*256-table9854[2])*256-table9854[3])*256);
 	table9854[5]=(uchar)(((((((f*256)/160000000-table9854[0])*256-table9854[1])*256-table9854[2])*256-table9854[3])*256-table9854[4])*256);
 	send_byte(PD,0x00);         //turn on I DAC and DIG,but still off Q DAC,PD: DC,DC,DC,COMP,  0,QDAC,DAC,DIG
 
-	send_byte(FTW1_6,table9854[0]);     //ÉèÖÃÆµÂÊ10MHz:15 55 46 8C 40 00
+	send_byte(FTW1_6,table9854[0]);     //è®¾ç½®é¢‘ç‡10MHz:15 55 46 8C 40 00
 	send_byte(FTW1_5,table9854[1]);
 	send_byte(FTW1_4,table9854[2]);
 	send_byte(FTW1_3,table9854[3]);
@@ -21,7 +21,7 @@ void set_sine(double freq)
 	send_byte(FTW1_1,table9854[5]);
 }
 
-//********µ¥Æ¬»ú³õÊ¼»¯***********//
+//********å•ç‰‡æœºåˆå§‹åŒ–***********//
 void init()
 {
  initClock();
@@ -32,38 +32,38 @@ void init()
 }
 //*******************************//
 
-//**********³õÊ¼»¯AD9854*********//
+//**********åˆå§‹åŒ–AD9854*********//
 void init_9854()
 {
   ctrl_out|=RST;
   delayus(1);
   ctrl_out&=~RST;
-                            //1FÎªÄ¬ÈÏÖµ£¬¼´Triangle=0£¬QDACÎªÄÚ²¿ÊäÈë£¬Ä£Ê½0£¬ÄÚ²¿Ë¢ĞÂÊ±ÖÓ
-  send_byte(REFCLK,0x04);     //PLLĞ¡ÓÚ200MHz£¬²»ÅÔÂ·PLL£¬4±¶Æµ
-  delayus(4);                 //ÑÓÊ±4us£¬ÒÔ±£Ö¤Êı¾İĞ´Èë
-  send_byte(UDCLK_1,0x20);     //½«Ë¢ĞÂÖÜÆÚ¸ÄÎª600¶àns£¬±£Ö¤·¢ËÍ1×Ö½ÚÊı¾İµÄÖÜÆÚ´óÓÚË¢ĞÂÖÜÆÚ
-  delayus(2);                 //ÑÓÊ±1us£¬ÒÔ±£Ö¤Êı¾İĞ´Èë
-  send_byte(PD,0x17);     //power downËùÓĞÄ£¿é
-  send_byte(OSK_S,0x00);     //²»ÅÔÂ·Inv Sinc£¬²»Ê¹ÄÜOSK EN
+                            //1Fä¸ºé»˜è®¤å€¼ï¼Œå³Triangle=0ï¼ŒQDACä¸ºå†…éƒ¨è¾“å…¥ï¼Œæ¨¡å¼0ï¼Œå†…éƒ¨åˆ·æ–°æ—¶é’Ÿ
+  send_byte(REFCLK,0x04);     //PLLå°äº200MHzï¼Œä¸æ—è·¯PLLï¼Œ4å€é¢‘
+  delayus(4);                 //å»¶æ—¶4usï¼Œä»¥ä¿è¯æ•°æ®å†™å…¥
+  send_byte(UDCLK_1,0x20);     //å°†åˆ·æ–°å‘¨æœŸæ”¹ä¸º600å¤šnsï¼Œä¿è¯å‘é€1å­—èŠ‚æ•°æ®çš„å‘¨æœŸå¤§äºåˆ·æ–°å‘¨æœŸ
+  delayus(2);                 //å»¶æ—¶1usï¼Œä»¥ä¿è¯æ•°æ®å†™å…¥
+  send_byte(PD,0x17);     //power downæ‰€æœ‰æ¨¡å—
+  send_byte(OSK_S,0x00);     //ä¸æ—è·¯Inv Sincï¼Œä¸ä½¿èƒ½OSK EN
 }
 //*******************************//
 
-//**********·¢ËÍ1×Ö½ÚÊı¾İ************//
+//**********å‘é€1å­—èŠ‚æ•°æ®************//
 void send_byte(uchar add,uchar data)
 {
   data_dir=0xff;
   ctrl_out|=WR;
-  add_out=add;        //ËÍµØÖ·
+  add_out=add;        //é€åœ°å€
   _NOP();
-  ctrl_out&=~WR;      //À­µÍWR
-  data_out=data;      //ËÍÊı¾İ
+  ctrl_out&=~WR;      //æ‹‰ä½WR
+  data_out=data;      //é€æ•°æ®
   _NOP();
-  ctrl_out|=WR;       //À­¸ßWR
+  ctrl_out|=WR;       //æ‹‰é«˜WR
   delayus(1);
 }
 //***********************************//
 
-//**********¶ÁÈ¡Ò»¸ö×Ö½ÚµÄÊı¾İ**********//
+//**********è¯»å–ä¸€ä¸ªå­—èŠ‚çš„æ•°æ®**********//
 uchar read_byte(uchar add)
 {
   uchar dat;
@@ -78,7 +78,7 @@ uchar read_byte(uchar add)
 }
 //**************************************//
 
-//**********1usÑÓÊ±************//
+//**********1uså»¶æ—¶************//
 void delayus(int t)
 {
   while(t--)us;
