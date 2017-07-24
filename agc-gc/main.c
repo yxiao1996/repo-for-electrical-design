@@ -56,7 +56,7 @@ void main()
 	ADC12CTL0 = ADC12SHT0_8 + ADC12REF2_5V +  ADC12ON;
 	                                            // Internal ref = 1.5V
 	ADC12CTL1 = ADC12SHP;                     // enable sample timer
-	ADC12MCTL0 = ADC12INCH_15;  				// ADC i/p ch A10 = temp sense i/p
+	ADC12MCTL0 = ADC12INCH_13;  				// ADC i/p ch A10 = temp sense i/p
 	ADC12IE = 0x001;                          // ADC_IFG upon conv result-ADCMEMO
 	__delay_cycles(75);                       // 75us delay to allow Ref to settle
 	ADC12CTL0 |= ADC12ENC;
@@ -71,7 +71,7 @@ void main()
 	AD9854_SetSine(20000, 4095);
     while(1)
 	{
-//		_DINT();
+		_DINT();
 		//check button
     	cur_btn = P4IN & 0x1F;
     	temp = (cur_btn ^ last_btn) & last_btn;
@@ -107,7 +107,7 @@ void main()
     	}
 		//adc output
 		dac_output();
-//		_EINT();
+		_EINT();
 		ADC12CTL0 |= ADC12SC;                   // Sampling and conversion start
 		__bis_SR_register(LPM4_bits + GIE);     // LPM0 with interrupts enabled
 		__no_operation();
