@@ -31,7 +31,7 @@ void main(void)
 	_EINT();
 	Draw_OptionBox(2);
 	Print_Confirm(mode);
-	set_sine(3500000);
+	set_sine(17500000);
 	while(1)
 	{
 		checkButton_gui(&mode, &option, 2);
